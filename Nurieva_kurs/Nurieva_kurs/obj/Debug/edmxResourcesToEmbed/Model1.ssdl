@@ -1,0 +1,100 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="Хранилище florModel" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="Flower">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="name" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="cost" Type="int" Nullable="false" />
+    <Property Name="image" Type="nvarchar" MaxLength="200" Nullable="false" />
+    <Property Name="type" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="FlowerType">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="name" Type="nvarchar" MaxLength="50" Nullable="false" />
+  </EntityType>
+  <EntityType Name="order">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="idUser" Type="int" Nullable="false" />
+    <Property Name="idFlower" Type="int" Nullable="false" />
+    <Property Name="count" Type="int" Nullable="false" />
+    <Property Name="address" Type="nvarchar" MaxLength="150" Nullable="false" />
+    <Property Name="phone" Type="nvarchar" MaxLength="11" Nullable="false" />
+  </EntityType>
+  <EntityType Name="User">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="email" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="pass" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="favorite" Type="int" Nullable="false" />
+  </EntityType>
+  <Association Name="FK_Flower_FlowerType">
+    <End Role="FlowerType" Type="Self.FlowerType" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="Flower" Type="Self.Flower" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="FlowerType">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="Flower">
+        <PropertyRef Name="type" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_order_Flower">
+    <End Role="Flower" Type="Self.Flower" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="order" Type="Self.order" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Flower">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="order">
+        <PropertyRef Name="idFlower" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_order_User">
+    <End Role="User" Type="Self.User" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="order" Type="Self.order" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="User">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="order">
+        <PropertyRef Name="idUser" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="Хранилище florModelContainer">
+    <EntitySet Name="Flower" EntityType="Self.Flower" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="FlowerType" EntityType="Self.FlowerType" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="order" EntityType="Self.order" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="User" EntityType="Self.User" Schema="dbo" store:Type="Tables" />
+    <AssociationSet Name="FK_Flower_FlowerType" Association="Self.FK_Flower_FlowerType">
+      <End Role="FlowerType" EntitySet="FlowerType" />
+      <End Role="Flower" EntitySet="Flower" />
+    </AssociationSet>
+    <AssociationSet Name="FK_order_Flower" Association="Self.FK_order_Flower">
+      <End Role="Flower" EntitySet="Flower" />
+      <End Role="order" EntitySet="order" />
+    </AssociationSet>
+    <AssociationSet Name="FK_order_User" Association="Self.FK_order_User">
+      <End Role="User" EntitySet="User" />
+      <End Role="order" EntitySet="order" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

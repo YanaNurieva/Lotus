@@ -1,0 +1,46 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Documents;
+using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
+using System.Windows.Shapes;
+
+namespace Nurieva_kurs.pages
+{
+    /// <summary>
+    /// Логика взаимодействия для choice.xaml
+    /// </summary>
+    public partial class choice : Page
+    {
+        public choice()
+        {
+
+            InitializeComponent();
+
+            rast.Click += (s, e) =>
+            {
+
+                bdController.changeFavorite(0);
+                MainWindow.changeFrame(MainWindow.type.itemList);
+
+            };
+
+            buket.Click += (s, e) =>
+            {
+
+                bdController.changeFavorite(1);
+                MainWindow.changeFrame(MainWindow.type.itemList);
+
+            };
+
+        }
+    }
+}

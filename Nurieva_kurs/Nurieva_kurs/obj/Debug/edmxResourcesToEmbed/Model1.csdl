@@ -1,0 +1,106 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="florModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="Flower">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="cost" Type="Int32" Nullable="false" />
+    <Property Name="image" Type="String" MaxLength="200" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="type" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="FlowerType" Relationship="Self.FK_Flower_FlowerType" FromRole="Flower" ToRole="FlowerType" />
+    <NavigationProperty Name="order" Relationship="Self.FK_order_Flower" FromRole="Flower" ToRole="order" />
+  </EntityType>
+  <EntityType Name="FlowerType">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <NavigationProperty Name="Flower" Relationship="Self.FK_Flower_FlowerType" FromRole="FlowerType" ToRole="Flower" />
+  </EntityType>
+  <EntityType Name="order">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="idUser" Type="Int32" Nullable="false" />
+    <Property Name="idFlower" Type="Int32" Nullable="false" />
+    <Property Name="count" Type="Int32" Nullable="false" />
+    <Property Name="address" Type="String" MaxLength="150" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="phone" Type="String" MaxLength="11" FixedLength="false" Unicode="true" Nullable="false" />
+    <NavigationProperty Name="Flower" Relationship="Self.FK_order_Flower" FromRole="order" ToRole="Flower" />
+    <NavigationProperty Name="User" Relationship="Self.FK_order_User" FromRole="order" ToRole="User" />
+  </EntityType>
+  <EntityType Name="User">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="email" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="pass" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="favorite" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="order" Relationship="Self.FK_order_User" FromRole="User" ToRole="order" />
+  </EntityType>
+  <Association Name="FK_Flower_FlowerType">
+    <End Role="FlowerType" Type="Self.FlowerType" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="Flower" Type="Self.Flower" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="FlowerType">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="Flower">
+        <PropertyRef Name="type" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_order_Flower">
+    <End Role="Flower" Type="Self.Flower" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="order" Type="Self.order" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Flower">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="order">
+        <PropertyRef Name="idFlower" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_order_User">
+    <End Role="User" Type="Self.User" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="order" Type="Self.order" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="User">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="order">
+        <PropertyRef Name="idUser" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="bd" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="Flower" EntityType="Self.Flower" />
+    <EntitySet Name="FlowerType" EntityType="Self.FlowerType" />
+    <EntitySet Name="order" EntityType="Self.order" />
+    <EntitySet Name="User" EntityType="Self.User" />
+    <AssociationSet Name="FK_Flower_FlowerType" Association="Self.FK_Flower_FlowerType">
+      <End Role="FlowerType" EntitySet="FlowerType" />
+      <End Role="Flower" EntitySet="Flower" />
+    </AssociationSet>
+    <AssociationSet Name="FK_order_Flower" Association="Self.FK_order_Flower">
+      <End Role="Flower" EntitySet="Flower" />
+      <End Role="order" EntitySet="order" />
+    </AssociationSet>
+    <AssociationSet Name="FK_order_User" Association="Self.FK_order_User">
+      <End Role="User" EntitySet="User" />
+      <End Role="order" EntitySet="order" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>
